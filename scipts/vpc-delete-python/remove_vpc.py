@@ -252,4 +252,4 @@ def main(profile):
 
 if __name__ == "__main__":
 
-  main(profile = 'admin@factory-proto')
+  main(profile = 'beau-madsen')
