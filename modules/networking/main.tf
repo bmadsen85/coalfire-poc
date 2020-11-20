@@ -146,7 +146,7 @@ resource "aws_security_group" "default" {
   }
 }
 
-/*
+/* Had an issue when uploading a keypair via terraform. Key would upload, but no .PEM file exported. Had to manually create key within AWS Console.
 resource "aws_key_pair" "coalfire-poc-ec2" {
   key_name   = "coalfire-poc-ec2"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPSrgPRWfzFfNRHaOd1KYWjJEmvCPR7JD7j0Sp8OhI+QMMupkUOwJRa6/92eCSCyZ8r2wfI7xHCmJ47Mq70SUYNwjKq3kUcNLtP8sDjm1v3U6k10mFiO6vmeLtm7wzm5Xdvo62iRq4Xw6XfXLkSzN0OYdZEO2dTfBr4McYaKd6XOTr80Cx73WjtURJ64kZdlZ74QYXR4G+t0WQ3jz/vU1LK2EQkP3bwsUMHiT1DrYRf3AN5dYRYyNGf0WUWnrlGxjXj5544D11q45RnN/7FYtwbL/aceeL7HRDdTRXdwmH8cG0fHi2TNCI73fWzE3EhQBCZDnsK9mRnwZKC3gZjIhB coalfire-poc-ec2"
@@ -158,6 +158,11 @@ resource "aws_instance" "redhat-public" {
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0d6fabfdeae4fbb47"
   key_name               = "coalfire-poc-ec2"
+
+  root_block_device {
+    volume_size = "20"
+    volume_type = "standard"
+  }
 }
 
 resource "aws_instance" "redhat-private" {
@@ -173,6 +178,11 @@ resource "aws_instance" "redhat-private" {
                   sudo systemctl enable httpd
                   sudo systemctl start httpd
                   EOF
+
+  root_block_device {
+    volume_size = "20"
+    volume_type = "standard"
+  }
 }
 
 /*resource "aws_alb" "alb" {
