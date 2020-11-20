@@ -19,5 +19,14 @@ output "security_groups_ids" {
 }
 
 output "public_route_table" {
-  value = "${aws_route_table.public.id}"
+  value = ["${aws_route_table.public.id}"]
 }
+
+output "alb_name" {
+  value = ["${var.environment}-alb"]
+}
+
+output "alb_subnets" {
+  value = ["${aws_subnet.private_subnet.*.id}"]
+}
+
