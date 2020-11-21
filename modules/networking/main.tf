@@ -154,9 +154,9 @@ resource "aws_key_pair" "coalfire-poc-ec2" {
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPSrgPRWfzFfNRHaOd1KYWjJEmvCPR7JD7j0Sp8OhI+QMMupkUOwJRa6/92eCSCyZ8r2wfI7xHCmJ47Mq70SUYNwjKq3kUcNLtP8sDjm1v3U6k10mFiO6vmeLtm7wzm5Xdvo62iRq4Xw6XfXLkSzN0OYdZEO2dTfBr4McYaKd6XOTr80Cx73WjtURJ64kZdlZ74QYXR4G+t0WQ3jz/vU1LK2EQkP3bwsUMHiT1DrYRf3AN5dYRYyNGf0WUWnrlGxjXj5544D11q45RnN/7FYtwbL/aceeL7HRDdTRXdwmH8cG0fHi2TNCI73fWzE3EhQBCZDnsK9mRnwZKC3gZjIhB coalfire-poc-ec2"
 }
 
+/*--Red Hat Enterprise Linux version 8--*/
 resource "aws_instance" "redhat-public" {
   ami = "ami-01e78c5619c5e68b4"
-  /*Red Hat Enterprise Linux version 8*/
   instance_type = "t2.micro"
   subnet_id = "subnet-0d6fabfdeae4fbb47"
   key_name = "coalfire-poc-ec2"
@@ -167,9 +167,9 @@ resource "aws_instance" "redhat-public" {
   }
 }
 
+/*--Red Hat Enterprise Linux version 8--*/
 resource "aws_instance" "redhat-private" {
   ami = "ami-01e78c5619c5e68b4"
-  /*Red Hat Enterprise Linux version 8*/
   instance_type = "t2.micro"
   subnet_id = "subnet-0682e21a2ccc76af2"
   key_name = "coalfire-poc-ec2"
