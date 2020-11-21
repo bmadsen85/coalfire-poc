@@ -7,13 +7,13 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnets_cidr" {
-  type        = list
+  type = list
   default = []
   description = "Public Subnet"
 }
 
 variable "private_subnets_cidr" {
-  type        = list
+  type = list
   default = []
   description = "Private Subnet"
 }
@@ -23,7 +23,7 @@ variable "region" {
 }
 
 variable "availability_zones" {
-  type        = list
+  type = list
   description = "multi-AZ resources"
 }
 
