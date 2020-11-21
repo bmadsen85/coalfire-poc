@@ -26,3 +26,4 @@ variable "availability_zones" {
   type        = list
   description = "multi-AZ resources"
 }
+

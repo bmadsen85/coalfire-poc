@@ -176,10 +176,12 @@ resource "aws_instance" "redhat-private" {
   user_data     = <<-EOF
                   #!/bin/bash
                   sudo su
-                  yum -y install httpd
+                  dnf install httpd
                   echo "<p>Apache Server</p>" >> /var/www/html/index.html
                   sudo systemctl enable httpd
                   sudo systemctl start httpd
+                  sudo firewall-cmd --zone=public --permanent --add-service=http
+                  sudo firewall-cmd --reload
                   EOF
 
   root_block_device {
@@ -190,7 +192,7 @@ resource "aws_instance" "redhat-private" {
 
 
 
-/* Continuing to work through terraform ALB / Target Group*/
+/* Continuing to work through ALB / Target Group setup via terraform */
 
 /*
 resource "aws_alb" "alb" {

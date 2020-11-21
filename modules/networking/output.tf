@@ -29,4 +29,3 @@ output "alb_name" {
 output "alb_subnets" {
   value = ["${aws_subnet.private_subnet.*.id}"]
 }
-
