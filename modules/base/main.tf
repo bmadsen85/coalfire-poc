@@ -138,7 +138,6 @@ EC2 + KeyPair
 resource "aws_instance" "redhat-public" {
   ami = "ami-01e78c5619c5e68b4" /*--Red Hat Enterprise Linux version 8--*/
   instance_type = "t2.micro"
-  security_groups = []
   subnet_id = aws_subnet.public_subnet.0.id
   key_name = "coalfire-poc-ec2"
 
