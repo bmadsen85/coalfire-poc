@@ -27,26 +27,6 @@ resource "aws_internet_gateway" "ig" {
   }
 }
 
-/* Elastic IP for NAT */
-resource "aws_eip" "nat_eip" {
-  vpc = true
-  depends_on = [
-    aws_internet_gateway.ig]
-}
-
-/* NAT */
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id = element(aws_subnet.public_subnet.*.id, 0)
-  depends_on = [
-    aws_internet_gateway.ig]
-
-  tags = {
-    Name = "nat"
-    Environment = var.environment
-  }
-}
-
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
   vpc_id = aws_vpc.vpc.id
@@ -101,12 +81,6 @@ resource "aws_route" "public_internet_gateway" {
   gateway_id = aws_internet_gateway.ig.id
 }
 
-resource "aws_route" "private_nat_gateway" {
-  route_table_id = aws_route_table.private.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.nat.id
-}
-
 /* Route table associations */
 resource "aws_route_table_association" "public" {
   count = length(var.public_subnets_cidr)
@@ -149,16 +123,19 @@ resource "aws_security_group" "default" {
   }
 }
 
+/*====
+EC2 + KeyPair
+======*/
+
 resource "aws_key_pair" "coalfire-poc-ec2" {
   key_name   = "coalfire-poc-ec2"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPSrgPRWfzFfNRHaOd1KYWjJEmvCPR7JD7j0Sp8OhI+QMMupkUOwJRa6/92eCSCyZ8r2wfI7xHCmJ47Mq70SUYNwjKq3kUcNLtP8sDjm1v3U6k10mFiO6vmeLtm7wzm5Xdvo62iRq4Xw6XfXLkSzN0OYdZEO2dTfBr4McYaKd6XOTr80Cx73WjtURJ64kZdlZ74QYXR4G+t0WQ3jz/vU1LK2EQkP3bwsUMHiT1DrYRf3AN5dYRYyNGf0WUWnrlGxjXj5544D11q45RnN/7FYtwbL/aceeL7HRDdTRXdwmH8cG0fHi2TNCI73fWzE3EhQBCZDnsK9mRnwZKC3gZjIhB coalfire-poc-ec2"
 }
 
-/*--Red Hat Enterprise Linux version 8--*/
 resource "aws_instance" "redhat-public" {
-  ami = "ami-01e78c5619c5e68b4"
+  ami = "ami-01e78c5619c5e68b4" /*--Red Hat Enterprise Linux version 8--*/
   instance_type = "t2.micro"
-  subnet_id = "subnet-0d6fabfdeae4fbb47"
+  subnet_id = aws_subnet.public_subnet.0.id
   key_name = "coalfire-poc-ec2"
 
   root_block_device {
@@ -167,11 +144,10 @@ resource "aws_instance" "redhat-public" {
   }
 }
 
-/*--Red Hat Enterprise Linux version 8--*/
 resource "aws_instance" "redhat-private" {
-  ami = "ami-01e78c5619c5e68b4"
+  ami = "ami-01e78c5619c5e68b4" /*--Red Hat Enterprise Linux version 8--*/
   instance_type = "t2.micro"
-  subnet_id = "subnet-0682e21a2ccc76af2"
+  subnet_id = aws_subnet.private_subnet.0.id
   key_name = "coalfire-poc-ec2"
   user_data = <<-EOF
                   #!/bin/bash
@@ -190,24 +166,8 @@ resource "aws_instance" "redhat-private" {
   }
 }
 
+/*====
+ALB + TG
+======*/
 
-/* Continuing to work through ALB / Target Group setup via terraform */
-
-/*
-resource "aws_alb" "alb" {
-  name = "${var.alb_name}"
-  subnets = ${var.alb_subnets}
-  tags {
-    Name = "${var.alb_name}"
-  }
-}
-*/
-
-/*
-resource "aws_alb" "alb_front" {
-	name		=	"front-alb"
-	internal	=	false
-	subnets		=	["${aws_subnet.private_subnet.1a.id}"]
-	enable_deletion_protection	=	true
-}
-*/
+/* Issues with creating ALB / Target Group via terraform */

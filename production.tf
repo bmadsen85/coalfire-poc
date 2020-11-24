@@ -11,8 +11,8 @@ locals {
     "${var.region}c"]
 }
 
-module "networking" {
-  source = "./modules/networking"
+module "base" {
+  source = "./modules/base"
 
   region = var.region
   environment = var.environment

@@ -6,7 +6,7 @@ variable "environment" {
   description = "Proof Of Concept Env"
 }
 
-//Networking
+//base
 variable "vpc_cidr" {
   description = "VPC CIDR"
 }
@@ -14,11 +14,11 @@ variable "vpc_cidr" {
 variable "public_subnets_cidr" {
   type        = list
   default = []
-  description = "Public Subnet"
+  description = "Public Subnets"
 }
 
 variable "private_subnets_cidr" {
   type        = list
   default = []
-  description = "Private Subnet"
+  description = "Private Subnets"
 }
