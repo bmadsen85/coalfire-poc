@@ -95,7 +95,7 @@ resource "aws_route_table_association" "private" {
 }
 
 /*====
-VPC's Default Security Group
+VPC Security Group
 ======*/
 resource "aws_security_group" "default" {
   name = "${var.environment}-default-sg"
@@ -134,7 +134,6 @@ EC2 + KeyPair
 }
 */
 
-/* Red Hat Enterprise Linux version 8 */
 resource "aws_instance" "redhat-public" {
   ami = "ami-01e78c5619c5e68b4" /*--Red Hat Enterprise Linux version 8--*/
   instance_type = "t2.micro"
@@ -147,7 +146,6 @@ resource "aws_instance" "redhat-public" {
   }
 }
 
-/* Red Hat Enterprise Linux version 8 */
 resource "aws_instance" "redhat-private" {
   ami = "ami-01e78c5619c5e68b4" /*--Red Hat Enterprise Linux version 8--*/
   instance_type = "t2.micro"
@@ -174,4 +172,4 @@ resource "aws_instance" "redhat-private" {
 ALB + TG
 ======*/
 
-/* Issues with creating ALB / Target Group via terraform */
+/* https://github.com/bmadsen85/coalfire-poc/issues/1 */
