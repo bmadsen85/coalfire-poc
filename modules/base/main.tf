@@ -99,7 +99,7 @@ VPC's Default Security Group
 ======*/
 resource "aws_security_group" "default" {
   name = "${var.environment}-default-sg"
-  description = "Default security group to allow inbound/outbound from the VPC"
+  description = "Security group allowing all inbound/outbound traffic"
   vpc_id = aws_vpc.vpc.id
   depends_on = [
     aws_vpc.vpc]
@@ -108,34 +108,37 @@ resource "aws_security_group" "default" {
     from_port = "0"
     to_port = "0"
     protocol = "-1"
-    self = true
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port = "0"
     to_port = "0"
     protocol = "-1"
-    self = "true"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
     Environment = var.environment
   }
+
 }
 
 /*====
 EC2 + KeyPair
 ======*/
 
-resource "aws_key_pair" "coalfire-poc-ec2" {
+/*resource "aws_key_pair" "coalfire-poc-ec2" {
   key_name   = "coalfire-poc-ec2"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPSrgPRWfzFfNRHaOd1KYWjJEmvCPR7JD7j0Sp8OhI+QMMupkUOwJRa6/92eCSCyZ8r2wfI7xHCmJ47Mq70SUYNwjKq3kUcNLtP8sDjm1v3U6k10mFiO6vmeLtm7wzm5Xdvo62iRq4Xw6XfXLkSzN0OYdZEO2dTfBr4McYaKd6XOTr80Cx73WjtURJ64kZdlZ74QYXR4G+t0WQ3jz/vU1LK2EQkP3bwsUMHiT1DrYRf3AN5dYRYyNGf0WUWnrlGxjXj5544D11q45RnN/7FYtwbL/aceeL7HRDdTRXdwmH8cG0fHi2TNCI73fWzE3EhQBCZDnsK9mRnwZKC3gZjIhB coalfire-poc-ec2"
 }
+*/
 
 /* Red Hat Enterprise Linux version 8 */
 resource "aws_instance" "redhat-public" {
   ami = "ami-01e78c5619c5e68b4" /*--Red Hat Enterprise Linux version 8--*/
   instance_type = "t2.micro"
+  security_groups = []
   subnet_id = aws_subnet.public_subnet.0.id
   key_name = "coalfire-poc-ec2"
 
